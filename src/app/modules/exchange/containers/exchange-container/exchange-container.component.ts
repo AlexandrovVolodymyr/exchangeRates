@@ -12,8 +12,10 @@ import { Currencies } from "../../interfaces/currencies";
 export class ExchangeContainerComponent implements OnInit, OnDestroy {
 
   currencies: Currencies;
+  currenciesAll: Currencies;
   currencyTo: any;
   currenciesByPeriod: any = [];
+  defaultCurrency: string = 'EUR';
   periodKeys: string[];
   periodFailed = false;
   private unsubscribe$: Subject<void> = new Subject();
@@ -21,17 +23,30 @@ export class ExchangeContainerComponent implements OnInit, OnDestroy {
   constructor(private exchangeApiService: ExchangeApiService) { }
 
   ngOnInit(): void {
-    this.getData();
+    this.getData(this.defaultCurrency);
+
+    this.exchangeApiService.getAll()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(data => {
+        this.currenciesAll = data;
+        this.currenciesAll.rates['EUR'] = 1;
+      });
   }
 
   selectedValue(value: string) {
-    if (value !== 'EUR') {
-      this.exchangeApiService.getTo(value)
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe(data => this.currencies = data);
-    } else {
-      this.getData();
-    }
+    this.defaultCurrency = value;
+    this.exchangeApiService.getFrom(value)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(data => {
+        this.currencies = data;
+      });
+    // if (value !== 'EUR') {
+    //   this.exchangeApiService.getTo(value)
+    //     .pipe(takeUntil(this.unsubscribe$))
+    //     .subscribe(data => this.currencies = data);
+    // } else {
+    //   this.getData();
+    // }
   }
 
   filterByPeriod(period: any) {
@@ -53,12 +68,12 @@ export class ExchangeContainerComponent implements OnInit, OnDestroy {
           this.periodFailed = true;
         });
     } else {
-      this.getData();
+      this.getData(this.defaultCurrency);
     }
   }
 
-  private getData() {
-    this.exchangeApiService.getFrom()
+  private getData(value: string) {
+    this.exchangeApiService.getFrom(value)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(data => this.currencies = data);
   }

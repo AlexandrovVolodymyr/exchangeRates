@@ -11,12 +11,12 @@ export class ExchangeApiService {
 
   constructor(private http: HttpClient) { }
 
-  get(): Observable<Currencies> {
+  getAll(): Observable<Currencies> {
     return this.http.get<Currencies>('https://api.frankfurter.app/latest');
   }
 
-  getFrom(): Observable<Currencies> {
-    return this.http.get<Currencies>(`https://api.frankfurter.app/latest?from=EUR`);
+  getFrom(value: string): Observable<Currencies> {
+    return this.http.get<Currencies>(`https://api.frankfurter.app/latest?from=${value}`);
   }
 
   getTo(value: string): Observable<Currencies> {

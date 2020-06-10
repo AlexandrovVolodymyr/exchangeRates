@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { FormBuilder, FormGroup, ValidatorFn, Validators } from "@angular/forms";
 import { takeUntil } from "rxjs/operators";
 import { Subject } from "rxjs";
+import { Currencies } from "../../interfaces/currencies";
 
 @Component({
   selector: 'app-conversion',
@@ -11,6 +12,7 @@ import { Subject } from "rxjs";
 export class ConversionComponent implements OnInit, OnDestroy {
 
   conversionForm: FormGroup;
+  @Input() currencies: Currencies;
   @Input() currencyTo: any;
   @Output() submitEvent = new EventEmitter();
 

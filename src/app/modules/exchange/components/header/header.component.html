@@ -3,11 +3,9 @@
     Exchange
   </div>
 
-  <mat-form-field>
-    <mat-select [(ngModel)]="selectedValue">
-      <mat-option value="EUR" (click)="onSelectedValue.emit(selectedValue)">{{ 'EUR' }}</mat-option>
-      <mat-option value="USD" (click)="onSelectedValue.emit(selectedValue)">{{ 'USD' }}</mat-option>
-      <mat-option value="MXN" (click)="onSelectedValue.emit(selectedValue)">{{ 'MXN' }}</mat-option>
+  <mat-form-field *ngIf="currencies">
+    <mat-select [(ngModel)]="selectedValue" (selectionChange)="onSelectedValue.emit(selectedValue)">
+      <mat-option value="{{currency.key}}" *ngFor="let currency of currencies.rates | keyvalue">{{ currency.key }}</mat-option>
     </mat-select>
   </mat-form-field>
 </mat-toolbar>

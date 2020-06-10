@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Currencies} from "../../interfaces/currencies";
 import {MatOptionSelectionChange} from "@angular/material/core";
+import { FormControl } from "@angular/forms";
 
 @Component({
   selector: 'app-header',
@@ -9,13 +10,12 @@ import {MatOptionSelectionChange} from "@angular/material/core";
 })
 export class HeaderComponent implements OnInit {
 
-  @Input() currencies: Currencies;
   selectedValue = 'EUR';
+  @Input() currencies: Currencies;
 
   @Output() onSelectedValue = new EventEmitter();
 
   constructor() { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 }

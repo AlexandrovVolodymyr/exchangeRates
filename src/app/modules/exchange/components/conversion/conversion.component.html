@@ -11,11 +11,9 @@
         <mat-error *ngIf="conversionForm.get('valueFrom').errors?.required">Required</mat-error>
       </mat-form-field>
       <br>
-      <mat-form-field class="with-select">
+      <mat-form-field class="with-select" *ngIf="currencies">
         <mat-select formControlName="currencyFrom">
-          <mat-option value="EUR">EUR</mat-option>
-          <mat-option value="USD">USD</mat-option>
-          <mat-option value="MXN">MXN</mat-option>
+          <mat-option value="{{currency.key}}" *ngFor="let currency of currencies.rates | keyvalue">{{ currency.key }}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
@@ -28,11 +26,9 @@
         <input matInput [value]="currencyTo ? currencyTo : null" disabled>
       </mat-form-field>
       <br>
-      <mat-form-field class="with-select">
+      <mat-form-field class="with-select" *ngIf="currencies">
         <mat-select formControlName="currencyTo">
-          <mat-option value="EUR">EUR</mat-option>
-          <mat-option value="USD">USD</mat-option>
-          <mat-option value="MXN">MXN</mat-option>
+          <mat-option value="{{currency.key}}" *ngFor="let currency of currencies.rates | keyvalue">{{ currency.key }}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
