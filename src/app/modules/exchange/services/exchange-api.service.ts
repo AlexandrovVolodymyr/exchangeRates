@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { Currencies } from "../interfaces/currencies";
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
@@ -23,21 +24,14 @@ export class ExchangeApiService {
   }
 
   getDateFrom(date): Observable<Currencies> {
-    const from = new Date(date.begin);
-    const fromDate = from.getDate() < 10 ? ("0" + from.getDate()) : from.getDate();
-    const begin = from.getFullYear()  + "-" + ("0" + (from.getMonth()+1)) + "-" + fromDate;
+    const begin = moment(date.begin).format('YYYY-MM-DD');
 
     return this.http.get<Currencies>(`https://api.frankfurter.app/${begin}`);
   }
 
   getByPeriod(date): Observable<any> {
-    const from = new Date(date.begin);
-    const fromDate = from.getDate() < 10 ? ("0" + from.getDate()) : from.getDate();
-    const begin = from.getFullYear()  + "-" + ("0" + (from.getMonth()+1)) + "-" + fromDate;
-
-    const to = new Date(date.end);
-    const toDate = to.getDate() < 10 ? ("0" + to.getDate()) : to.getDate();
-    const end = to.getFullYear()  + "-" + ("0" + (to.getMonth()+1)) + "-" + toDate;
+    const begin = moment(date.begin).format('YYYY-MM-DD');
+    const end = moment(date.end).format('YYYY-MM-DD');
 
     return this.http.get(`https://api.frankfurter.app/${begin}..${end}`);
   }

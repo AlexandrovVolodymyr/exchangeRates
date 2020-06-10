@@ -1,7 +1,7 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
-import {takeUntil} from "rxjs/operators";
-import {Subject} from "rxjs";
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup, ValidatorFn, Validators } from "@angular/forms";
+import { takeUntil } from "rxjs/operators";
+import { Subject } from "rxjs";
 
 @Component({
   selector: 'app-conversion',
@@ -20,21 +20,20 @@ export class ConversionComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.conversionForm = this.fb.group({
-      valueFrom: new FormControl(null, [Validators.pattern("^[0-9]*$")]),
-      currencyFrom: new FormControl('EUR'),
-      valueTo: new FormControl(this.currencyTo ? this.currencyTo : null),
-      currencyTo: new FormControl('USD')
-    });
+      valueFrom: [null, [Validators.required, Validators.pattern("^[0-9]*$")]],
+      currencyFrom: ['EUR'],
+      currencyTo: ['USD']
+    }, { validator: CompareCurrency});
 
     this.conversionForm.valueChanges
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(values => {
-        this.submitEvent.emit(this.conversionForm.value);
+        if (this.conversionForm.valid) {
+          this.submitEvent.emit(this.conversionForm.value);
+        } else {
+          this.currencyTo = null;
+        }
       })
-  }
-
-  submitForm() {
-    // this.submitEvent.emit(this.conversionForm.value);
   }
 
   ngOnDestroy() {
@@ -43,3 +42,11 @@ export class ConversionComponent implements OnInit, OnDestroy {
   }
 
 }
+
+const CompareCurrency: ValidatorFn = (fg: FormGroup) => {
+  const from = fg.get('currencyFrom').value;
+  const to = fg.get('currencyTo').value;
+  return from !== to
+    ? null
+    : { compare: true };
+};

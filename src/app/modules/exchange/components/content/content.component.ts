@@ -9,20 +9,12 @@ import {Subject} from "rxjs";
   templateUrl: './content.component.html',
   styleUrls: ['./content.component.scss']
 })
-export class ContentComponent implements OnInit, OnDestroy {
+export class ContentComponent implements OnInit {
 
   @Input() currencies: Currencies;
-  @Output() formValues = new EventEmitter();
-  form: FormGroup;
-  private unsubscribe$: Subject<void> = new Subject();
 
-  constructor(private fb: FormBuilder) { }
+  constructor() { }
 
   ngOnInit(): void {}
-
-  ngOnDestroy() {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
-  }
 
 }

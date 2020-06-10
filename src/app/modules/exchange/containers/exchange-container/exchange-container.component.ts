@@ -45,9 +45,7 @@ export class ExchangeContainerComponent implements OnInit, OnDestroy {
         )
         .subscribe(data => {
           for(let i = 0; i < this.periodKeys.length; i++) {
-            // console.log('period', data.rates[this.periodKeys[i]]);
             this.currenciesByPeriod.push(data.rates[this.periodKeys[i]]);
-            // console.log('period', this.currenciesByPeriod);
           }
           this.periodFailed = false;
         }, error => {
