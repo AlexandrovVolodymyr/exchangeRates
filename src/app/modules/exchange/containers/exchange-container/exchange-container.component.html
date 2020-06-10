@@ -1,0 +1,10 @@
+<app-header [currencies]="currencies" (onSelectedValue)="selectedValue($event)"></app-header>
+<div class="main">
+  <div class="container">
+    <app-content [currencies]="currencies"></app-content>
+  </div>
+  <div class="sidebar">
+    <app-conversion (submitEvent)="convert($event)" [currencyTo]="currencyTo"></app-conversion>
+    <app-filtered (periodEvent)="filterByPeriod($event)" [currenciesByPeriod]="currenciesByPeriod" [periodKeys]="periodKeys" [periodFailed]="periodFailed"></app-filtered>
+  </div>
+</div>

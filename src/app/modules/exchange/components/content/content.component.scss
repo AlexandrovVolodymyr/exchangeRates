@@ -1,0 +1,30 @@
+.content {
+  .content-title {
+    margin-top: 16px;
+    text-align: center;
+  }
+
+  .currency-list {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    @media screen and (max-width: 991px) {
+      max-height: 511px;
+      overflow: auto;
+    }
+
+    li {
+      border: 1px solid #000000;
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex: 0 0 100%;
+      max-width: 100%;
+
+      &:not(:first-child) {
+        border-top: none;
+      }
+    }
+  }
+}

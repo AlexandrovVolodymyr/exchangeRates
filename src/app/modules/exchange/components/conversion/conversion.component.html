@@ -1,0 +1,39 @@
+<form class="conversion-form" [formGroup]="conversionForm">
+
+  <h2 class="conversion-title">Conversion</h2>
+
+  <div class="form-row">
+    <div class="form-set">
+      <mat-form-field appearance="fill">
+        <mat-label>Enter value</mat-label>
+        <input matInput formControlName="valueFrom">
+        <mat-error *ngIf="conversionForm.get('valueFrom').invalid">Only Numbers</mat-error>
+      </mat-form-field>
+      <br>
+      <mat-form-field class="with-select">
+        <mat-select formControlName="currencyFrom">
+          <mat-option value="EUR">EUR</mat-option>
+          <mat-option value="USD">USD</mat-option>
+          <mat-option value="MXN">MXN</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <button class="conversion-btn" (click)="submitForm()" [class.disabled]="!conversionForm.get('valueFrom').value || conversionForm.get('valueFrom').invalid"></button>
+
+    <div class="form-set">
+      <mat-form-field appearance="fill">
+        <mat-label>Convert value</mat-label>
+        <input matInput formControlName="valueTo" [value]="currencyTo ? currencyTo : null">
+      </mat-form-field>
+      <br>
+      <mat-form-field class="with-select">
+        <mat-select formControlName="currencyTo">
+          <mat-option value="EUR">EUR</mat-option>
+          <mat-option value="USD">USD</mat-option>
+          <mat-option value="MXN">MXN</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+</form>

@@ -1,0 +1,25 @@
+.main {
+  display: flex;
+  flex-wrap: wrap;
+
+  .container {
+    max-width: calc(100% - 550px);
+    flex: 0 0 calc(100% - 550px);
+    padding: 0 15px;
+    @media screen and (max-width: 767px) {
+      max-width: 550px;
+      flex: 0 0 100%;
+      margin: auto;
+    }
+  }
+
+  .sidebar {
+    max-width: 550px;
+    flex: 0 0 550px;
+    @media screen and (max-width: 767px) {
+      max-width: 550px;
+      flex: 0 0 100%;
+      margin: auto;
+    }
+  }
+}

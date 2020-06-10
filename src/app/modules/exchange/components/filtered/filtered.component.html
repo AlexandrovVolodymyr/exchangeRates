@@ -1,0 +1,36 @@
+<form class="filtered-form" [formGroup]="filteredForm">
+  <h2 class="filtered-title">Filter By Period</h2>
+
+  <mat-form-field>
+    <input matInput
+           placeholder="Choose a date"
+           [satDatepicker]="picker2"
+           formControlName="date">
+    <sat-datepicker #picker2 [rangeMode]="true">
+    </sat-datepicker>
+    <sat-datepicker-toggle matSuffix [for]="picker2"></sat-datepicker-toggle>
+  </mat-form-field>
+
+  <div class="filtered-reset">
+    <button mat-raised-button color="accent" (click)="resetForm()">Reset</button>
+  </div>
+
+  <ul class="filtered-list" *ngIf="!periodFailed;">
+    <li *ngFor="let key of periodKeys">
+      <div class="date">
+        {{ key }}
+      </div>
+      <div class="item-height">
+        <ng-container *ngFor="let items of currenciesByPeriod | keyvalue">
+          <div class="item" *ngFor="let value of items.value | keyvalue">
+            <span class="item-key">{{ value.key }}</span>
+            <span class="item-value">{{ value.value }}</span>
+          </div>
+        </ng-container>
+      </div>
+    </li>
+  </ul>
+  <ng-container *ngIf="periodFailed;">
+    <div class="failed-data">No data by this period</div>
+  </ng-container>
+</form>

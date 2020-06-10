@@ -1,0 +1,11 @@
+<div class="content">
+  <h2 class="content-title">
+    Exchange Rates
+  </h2>
+  <ul class="currency-list" *ngIf="currencies">
+    <li *ngFor="let currency of currencies.rates | keyvalue">
+      <div class="currency-key">{{ currency.key }}</div>
+      <div class="currency-value">{{ currency.value }}</div>
+    </li>
+  </ul>
+</div>
