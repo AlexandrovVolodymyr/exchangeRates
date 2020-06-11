@@ -11,7 +11,7 @@ import { FormControl } from "@angular/forms";
 export class HeaderComponent implements OnInit {
 
   selectedValue = 'EUR';
-  @Input() currencies: Currencies;
+  @Input() currencies: any;
 
   @Output() onSelectedValue = new EventEmitter();
 

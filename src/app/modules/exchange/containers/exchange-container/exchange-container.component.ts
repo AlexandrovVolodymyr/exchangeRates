@@ -1,8 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { ExchangeApiService } from "../../services/exchange-api.service";
-import { takeUntil, tap } from "rxjs/operators";
+import { map, pluck, takeUntil, tap } from "rxjs/operators";
 import { Currencies } from "../../interfaces/currencies";
+import { Store } from "@ngrx/store";
+import * as ExchangeActions from "../../../../store/exchange/actions/exchange.actions";
+import { ExchangeState } from "../../../../store/exchange/state/exchange.state";
+import {
+  convertCurrencies,
+  currencies,
+  currenciesFrom, periodCurrencies
+} from "../../../../store/exchange/state/exchange-state.selectors";
 
 @Component({
   selector: 'app-exchange-container',
@@ -11,77 +19,80 @@ import { Currencies } from "../../interfaces/currencies";
 })
 export class ExchangeContainerComponent implements OnInit, OnDestroy {
 
-  currencies: Currencies;
-  currenciesAll: Currencies;
   currencyTo: any;
-  currenciesByPeriod: any = [];
   defaultCurrency: string = 'EUR';
-  periodKeys: string[];
   periodFailed = false;
+
+  currenciesAll$: Observable<any>;
+  currencies$: Observable<Currencies>;
+  currencyTo$: Observable<any>;
+  periodCurrencies$: Observable<any>;
+
   private unsubscribe$: Subject<void> = new Subject();
 
-  constructor(private exchangeApiService: ExchangeApiService) { }
+  constructor(
+    private exchangeApiService: ExchangeApiService,
+    private store: Store<ExchangeState>
+  ) { }
 
   ngOnInit(): void {
     this.getData(this.defaultCurrency);
 
-    this.exchangeApiService.getAll()
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(data => {
-        this.currenciesAll = data;
-        this.currenciesAll.rates['EUR'] = 1;
-      });
+    this.store.dispatch(ExchangeActions.getAll());
+
+    this.currenciesAll$ = this.store
+      .pipe(
+        currencies,
+        map(currencies => {
+          return {...currencies.rates, ...{'EUR': 1}};
+        }),
+        takeUntil(this.unsubscribe$)
+      );
+
+    this.periodCurrencies$ = this.store
+      .pipe(
+        periodCurrencies,
+        pluck('rates'),
+        map(rates => {
+          const dates = Object.keys(rates);
+          const currencies = Object.values(rates);
+          return { dates, currencies };
+        }),
+        takeUntil(this.unsubscribe$)
+      );
+
   }
 
   selectedValue(value: string) {
     this.defaultCurrency = value;
-    this.exchangeApiService.getFrom(value)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(data => {
-        this.currencies = data;
-      });
-    // if (value !== 'EUR') {
-    //   this.exchangeApiService.getTo(value)
-    //     .pipe(takeUntil(this.unsubscribe$))
-    //     .subscribe(data => this.currencies = data);
-    // } else {
-    //   this.getData();
-    // }
+
+    this.getData(value);
   }
 
-  filterByPeriod(period: any) {
-    if (period.date) {
-      this.exchangeApiService.getByPeriod(period.date)
-        .pipe(
-          tap(period => {
-            this.periodKeys = Object.keys(period.rates);
-          }),
-          takeUntil(this.unsubscribe$)
-        )
-        .subscribe(data => {
-          for(let i = 0; i < this.periodKeys.length; i++) {
-            this.currenciesByPeriod.push(data.rates[this.periodKeys[i]]);
-          }
-          this.periodFailed = false;
-        }, error => {
-          console.log(error);
-          this.periodFailed = true;
-        });
+  filterByPeriod({ date }: any) {
+    if (date) {
+      const { begin, end } = date;
+      this.store.dispatch(ExchangeActions.period({ begin, end }));
     } else {
-      this.getData(this.defaultCurrency);
+      this.periodFailed = true;
+      this.store.dispatch(ExchangeActions.periodFail({ error: true }));
     }
   }
 
   private getData(value: string) {
-    this.exchangeApiService.getFrom(value)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(data => this.currencies = data);
+    this.store.dispatch(ExchangeActions.getFrom({ currency: value }));
+    this.currencies$ = this.store
+      .pipe(currenciesFrom, takeUntil(this.unsubscribe$))
   }
 
-  convert(values) {
-    this.exchangeApiService.convertCurrency(values)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(data => this.currencyTo = Object.values(data.rates)[0]);
+  convert({ valueFrom: amount, currencyFrom: from, currencyTo: to }) {
+    this.store.dispatch(ExchangeActions.convertValue({ amount, from, to }));
+    this.currencyTo$ = this.store
+      .pipe(
+        convertCurrencies,
+        map(res => Object.values(res['rates'])[0]),
+        takeUntil(this.unsubscribe$)
+      )
   }
 
   ngOnDestroy() {

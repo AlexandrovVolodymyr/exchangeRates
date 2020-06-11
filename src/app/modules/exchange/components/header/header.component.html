@@ -5,7 +5,7 @@
 
   <mat-form-field *ngIf="currencies">
     <mat-select [(ngModel)]="selectedValue" (selectionChange)="onSelectedValue.emit(selectedValue)">
-      <mat-option value="{{currency.key}}" *ngFor="let currency of currencies.rates | keyvalue">{{ currency.key }}</mat-option>
+      <mat-option value="{{currency.key}}" *ngFor="let currency of currencies | keyvalue">{{ currency.key }}</mat-option>
     </mat-select>
   </mat-form-field>
 </mat-toolbar>

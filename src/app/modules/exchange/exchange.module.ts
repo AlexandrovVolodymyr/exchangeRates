@@ -12,8 +12,7 @@ import {MatInputModule} from "@angular/material/input";
 import {MatButtonModule} from "@angular/material/button";
 import { ConversionComponent } from './components/conversion/conversion.component';
 import { FilteredComponent } from './components/filtered/filtered.component';
-import { StoreModule } from "@ngrx/store";
-import { EXCHANGE_REDUCER_NODE, exchangeReducer } from "../../store/exchange/exchange.reducer";
+import { ExchangeStateModule } from "../../store/exchange/exchange-state.module";
 
 @NgModule({
   declarations: [
@@ -34,7 +33,7 @@ import { EXCHANGE_REDUCER_NODE, exchangeReducer } from "../../store/exchange/exc
     ReactiveFormsModule,
     SatDatepickerModule,
     SatNativeDateModule,
-    StoreModule.forFeature(EXCHANGE_REDUCER_NODE, exchangeReducer)
+    ExchangeStateModule
   ]
 })
 export class ExchangeModule { }

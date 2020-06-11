@@ -1,10 +1,10 @@
-<app-header [currencies]="currenciesAll" (onSelectedValue)="selectedValue($event)"></app-header>
+<app-header [currencies]="currenciesAll$ | async" (onSelectedValue)="selectedValue($event)"></app-header>
 <div class="main">
   <div class="container">
-    <app-content [currencies]="currencies"></app-content>
+    <app-content [currencies]="currencies$ | async"></app-content>
   </div>
   <div class="sidebar">
-    <app-conversion (submitEvent)="convert($event)" [currencyTo]="currencyTo" [currencies]="currenciesAll"></app-conversion>
-    <app-filtered (periodEvent)="filterByPeriod($event)" [currenciesByPeriod]="currenciesByPeriod" [periodKeys]="periodKeys" [periodFailed]="periodFailed"></app-filtered>
+    <app-conversion (submitEvent)="convert($event)" [currencyTo]="currencyTo$ | async" [currencies]="currenciesAll$ | async"></app-conversion>
+    <app-filtered (periodEvent)="filterByPeriod($event)" [currenciesByPeriod]="periodCurrencies$ | async" [periodFailed]="periodFailed"></app-filtered>
   </div>
 </div>

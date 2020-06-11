@@ -33,10 +33,15 @@ export class ExchangeApiService {
     const begin = moment(date.begin).format('YYYY-MM-DD');
     const end = moment(date.end).format('YYYY-MM-DD');
 
-    return this.http.get(`https://api.frankfurter.app/${begin}..${end}`);
+    return this.http.get<any>(`https://api.frankfurter.app/${begin}..${end}`);
   }
 
-  convertCurrency(values): Observable<any> {
-    return this.http.get<any>(`https://api.frankfurter.app/latest?amount=${values.valueFrom}&from=${values.currencyFrom}&to=${values.currencyTo}`);
+  convertCurrency({ amount, from, to }): Observable<any> {
+    const params = {
+      amount,
+      from,
+      to
+    }
+    return this.http.get<any>('https://api.frankfurter.app/latest', { params });
   }
 }

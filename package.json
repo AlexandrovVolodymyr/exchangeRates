@@ -29,6 +29,7 @@
     "@angular/platform-browser-dynamic": "~9.1.9",
     "@angular/router": "~9.1.9",
     "@ngrx/effects": "^9.2.0",
+    "@ngrx/entity": "^9.2.0",
     "@ngrx/store": "^9.2.0",
     "@ngrx/store-devtools": "^9.2.0",
     "express": "^4.17.1",

@@ -1,8 +1,7 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup} from "@angular/forms";
-import { catchError, takeUntil } from "rxjs/operators";
-import {Subject} from "rxjs";
-import {Currencies} from "../../interfaces/currencies";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormGroup } from "@angular/forms";
+import { takeUntil } from "rxjs/operators";
+import { Subject } from "rxjs";
 
 @Component({
   selector: 'app-filtered',
@@ -13,7 +12,6 @@ export class FilteredComponent implements OnInit {
 
   filteredForm: FormGroup;
   @Input() currenciesByPeriod: any;
-  @Input() periodKeys: string[];
   @Input() periodFailed: boolean;
   @Output() periodEvent = new EventEmitter();
   private unsubscribe$: Subject<void> = new Subject();
@@ -37,8 +35,6 @@ export class FilteredComponent implements OnInit {
 
   resetForm() {
     this.filteredForm.reset();
-    this.periodKeys = [];
-    this.periodFailed = false;
   }
 
 }

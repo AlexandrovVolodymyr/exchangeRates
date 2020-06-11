@@ -12,7 +12,7 @@ import { Currencies } from "../../interfaces/currencies";
 export class ConversionComponent implements OnInit, OnDestroy {
 
   conversionForm: FormGroup;
-  @Input() currencies: Currencies;
+  @Input() currencies: any;
   @Input() currencyTo: any;
   @Output() submitEvent = new EventEmitter();
 
@@ -30,6 +30,7 @@ export class ConversionComponent implements OnInit, OnDestroy {
     this.conversionForm.valueChanges
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(values => {
+        const { amount, from, to } = this.conversionForm.value;
         if (this.conversionForm.valid) {
           this.submitEvent.emit(this.conversionForm.value);
         } else {

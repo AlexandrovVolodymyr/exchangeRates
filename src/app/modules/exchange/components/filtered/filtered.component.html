@@ -15,13 +15,13 @@
     <button mat-raised-button color="accent" (click)="resetForm()">Reset</button>
   </div>
 
-  <ul class="filtered-list" *ngIf="!periodFailed;">
-    <li *ngFor="let key of periodKeys">
+  <ul class="filtered-list" *ngIf="currenciesByPeriod.dates && currenciesByPeriod.dates.length; else empty">
+    <li *ngFor="let date of currenciesByPeriod.dates">
       <div class="date">
-        {{ key }}
+        {{ date }}
       </div>
       <div class="item-height">
-        <ng-container *ngFor="let items of currenciesByPeriod | keyvalue">
+        <ng-container *ngFor="let items of currenciesByPeriod.currencies | keyvalue">
           <div class="item" *ngFor="let value of items.value | keyvalue">
             <span class="item-key">{{ value.key }}</span>
             <span class="item-value">{{ value.value }}</span>
@@ -30,7 +30,8 @@
       </div>
     </li>
   </ul>
-  <ng-container *ngIf="periodFailed;">
-    <div class="failed-data">No data by this period</div>
-  </ng-container>
 </form>
+
+<ng-template #empty>
+  <div class="failed-data" *ngIf="filteredForm.touched || filteredForm.dirty">No data by this period</div>
+</ng-template>
