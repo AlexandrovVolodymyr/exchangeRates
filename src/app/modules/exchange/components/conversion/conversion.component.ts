@@ -1,13 +1,14 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ValidatorFn, Validators } from "@angular/forms";
+
 import { takeUntil } from "rxjs/operators";
 import { Subject } from "rxjs";
-import { Currencies } from "../../interfaces/currencies";
 
 @Component({
   selector: 'app-conversion',
   templateUrl: './conversion.component.html',
-  styleUrls: ['./conversion.component.scss']
+  styleUrls: ['./conversion.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ConversionComponent implements OnInit, OnDestroy {
 

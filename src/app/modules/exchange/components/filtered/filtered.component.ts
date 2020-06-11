@@ -1,12 +1,14 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from "@angular/forms";
+
 import { takeUntil } from "rxjs/operators";
 import { Subject } from "rxjs";
 
 @Component({
   selector: 'app-filtered',
   templateUrl: './filtered.component.html',
-  styleUrls: ['./filtered.component.scss']
+  styleUrls: ['./filtered.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FilteredComponent implements OnInit {
 

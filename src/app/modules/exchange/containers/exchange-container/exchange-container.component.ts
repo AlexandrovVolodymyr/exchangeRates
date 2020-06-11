@@ -1,21 +1,25 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable, Subject } from "rxjs";
-import { ExchangeApiService } from "../../services/exchange-api.service";
-import { map, pluck, takeUntil, tap } from "rxjs/operators";
-import { Currencies } from "../../interfaces/currencies";
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from "@ngrx/store";
+
+import { Observable, Subject } from "rxjs";
+import { map, pluck, takeUntil } from "rxjs/operators";
+
+import { Currencies } from "../../interfaces/currencies";
+import { ExchangeApiService } from "../../services/exchange-api.service";
 import * as ExchangeActions from "../../../../store/exchange/actions/exchange.actions";
 import { ExchangeState } from "../../../../store/exchange/state/exchange.state";
 import {
   convertCurrencies,
   currencies,
-  currenciesFrom, periodCurrencies
+  currenciesFrom,
+  periodCurrencies
 } from "../../../../store/exchange/state/exchange-state.selectors";
 
 @Component({
   selector: 'app-exchange-container',
   templateUrl: './exchange-container.component.html',
-  styleUrls: ['./exchange-container.component.scss']
+  styleUrls: ['./exchange-container.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ExchangeContainerComponent implements OnInit, OnDestroy {
 

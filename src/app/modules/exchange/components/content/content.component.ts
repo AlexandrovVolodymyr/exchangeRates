@@ -1,13 +1,11 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {Currencies} from "../../interfaces/currencies";
-import {FormBuilder, FormGroup} from "@angular/forms";
-import {takeUntil} from "rxjs/operators";
-import {Subject} from "rxjs";
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { Currencies } from "../../interfaces/currencies";
 
 @Component({
   selector: 'app-content',
   templateUrl: './content.component.html',
-  styleUrls: ['./content.component.scss']
+  styleUrls: ['./content.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ContentComponent implements OnInit {
 
