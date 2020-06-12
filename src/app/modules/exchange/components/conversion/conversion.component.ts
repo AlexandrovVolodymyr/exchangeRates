@@ -30,10 +30,12 @@ export class ConversionComponent implements OnInit, OnDestroy {
 
     this.conversionForm.valueChanges
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(values => {
-        const { amount, from, to } = this.conversionForm.value;
+      .subscribe((values) => {
+        const amount = values.valueFrom;
+        const from = values.currencyFrom;
+        const to = values.currencyTo;
         if (this.conversionForm.valid) {
-          this.submitEvent.emit(this.conversionForm.value);
+          this.submitEvent.emit({ amount, from, to });
         } else {
           this.currencyTo = null;
         }

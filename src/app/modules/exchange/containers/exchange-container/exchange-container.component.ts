@@ -30,7 +30,7 @@ export class ExchangeContainerComponent implements OnInit, OnDestroy {
   currenciesAll$: Observable<any>;
   currencies$: Observable<Currencies>;
   currencyTo$: Observable<any>;
-  periodCurrencies$: Observable<any>;
+  periodCurrencies$: Observable<{ dates: string[], currencies: any[] }>;
 
   private unsubscribe$: Subject<void> = new Subject();
 
@@ -48,7 +48,7 @@ export class ExchangeContainerComponent implements OnInit, OnDestroy {
       .pipe(
         currencies,
         map(currencies => {
-          return {...currencies.rates, ...{'EUR': 1}};
+          return {...currencies.rates, ...{[this.defaultCurrency]: 1}};
         }),
         takeUntil(this.unsubscribe$)
       );
@@ -78,18 +78,11 @@ export class ExchangeContainerComponent implements OnInit, OnDestroy {
       const { begin, end } = date;
       this.store.dispatch(ExchangeActions.period({ begin, end }));
     } else {
-      this.periodFailed = true;
-      this.store.dispatch(ExchangeActions.periodFail({ error: true }));
+      this.store.dispatch(ExchangeActions.periodClear());
     }
   }
 
-  private getData(value: string) {
-    this.store.dispatch(ExchangeActions.getFrom({ currency: value }));
-    this.currencies$ = this.store
-      .pipe(currenciesFrom, takeUntil(this.unsubscribe$))
-  }
-
-  convert({ valueFrom: amount, currencyFrom: from, currencyTo: to }) {
+  convert({ amount, from, to }) {
     this.store.dispatch(ExchangeActions.convertValue({ amount, from, to }));
     this.currencyTo$ = this.store
       .pipe(
@@ -97,6 +90,12 @@ export class ExchangeContainerComponent implements OnInit, OnDestroy {
         map(res => Object.values(res['rates'])[0]),
         takeUntil(this.unsubscribe$)
       )
+  }
+
+  private getData(value: string) {
+    this.store.dispatch(ExchangeActions.getFrom({ currency: value }));
+    this.currencies$ = this.store
+      .pipe(currenciesFrom, takeUntil(this.unsubscribe$))
   }
 
   ngOnDestroy() {

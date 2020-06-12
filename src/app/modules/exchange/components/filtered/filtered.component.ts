@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup } from "@angular/forms";
 import { takeUntil } from "rxjs/operators";
 import { Subject } from "rxjs";
 
+import * as moment from 'moment';
+
 @Component({
   selector: 'app-filtered',
   templateUrl: './filtered.component.html',
@@ -32,7 +34,10 @@ export class FilteredComponent implements OnInit {
       .pipe(
         takeUntil(this.unsubscribe$)
       )
-      .subscribe(period => this.periodEvent.emit(period));
+      .subscribe(period => {
+        this.periodFailed = period.date && (moment(period.date.begin).format('YYYY-MM-DD') >= moment(new Date()).format('YYYY-MM-DD'));
+        this.periodEvent.emit(period);
+      });
   }
 
   resetForm() {

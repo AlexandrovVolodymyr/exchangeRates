@@ -69,7 +69,7 @@ const currencyReducer = createReducer(
     return {
       ...state,
       convertResult,
-      loading: true
+      loading: false
     }
   }),
   on(ExchangeActions.convertValueFail, (state, { error }) => {
@@ -104,6 +104,15 @@ const currencyReducer = createReducer(
         rates: {}
       },
       error,
+      loading: false
+    }
+  }),
+  on(ExchangeActions.periodClear, (state) => {
+    return {
+      ...state,
+      periodCurrencies: {
+        rates: {}
+      },
       loading: false
     }
   })

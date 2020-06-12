@@ -15,7 +15,7 @@
     <button mat-raised-button color="accent" (click)="resetForm()">Reset</button>
   </div>
 
-  <ul class="filtered-list" *ngIf="currenciesByPeriod.dates.length; else empty">
+  <ul class="filtered-list" *ngIf="!periodFailed; else empty">
     <li *ngFor="let date of currenciesByPeriod.dates">
       <div class="date">
         {{ date }}
@@ -33,6 +33,5 @@
 </form>
 
 <ng-template #empty>
-<!--  *ngIf="filteredForm.touched || filteredForm.dirty"-->
   <div class="failed-data" *ngIf="filteredForm.dirty">No data by this period</div>
 </ng-template>
