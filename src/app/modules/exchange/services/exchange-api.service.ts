@@ -33,7 +33,7 @@ export class ExchangeApiService {
     const begin = moment(date.begin).format('YYYY-MM-DD');
     const end = moment(date.end).format('YYYY-MM-DD');
 
-    return this.http.get<any>(`https://api.frankfurter.app/${begin}..${end}`);
+    return this.http.get<any>(`https://api.frankfurter.app/${begin}..${end}?from=${date.currency}`);
   }
 
   convertCurrency({ amount, from, to }): Observable<any> {

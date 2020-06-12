@@ -15,6 +15,8 @@ import {
   periodCurrencies
 } from "../../../../store/exchange/state/exchange-state.selectors";
 
+import * as moment from "moment";
+
 @Component({
   selector: 'app-exchange-container',
   templateUrl: './exchange-container.component.html',
@@ -26,6 +28,8 @@ export class ExchangeContainerComponent implements OnInit, OnDestroy {
   currencyTo: any;
   defaultCurrency: string = 'EUR';
   periodFailed = false;
+  periodBegin = null;
+  periodEnd = null;
 
   currenciesAll$: Observable<any>;
   currencies$: Observable<Currencies>;
@@ -69,15 +73,22 @@ export class ExchangeContainerComponent implements OnInit, OnDestroy {
 
   selectedValue(value: string) {
     this.defaultCurrency = value;
-
     this.getData(value);
+
+    if (moment(this.periodBegin).format('YYYY-MM-DD') < moment(new Date()).format('YYYY-MM-DD')) {
+      this.store.dispatch(ExchangeActions.period({ begin: this.periodBegin, end: this.periodEnd, currency: this.defaultCurrency }));
+    }
   }
 
   filterByPeriod({ date }: any) {
     if (date) {
       const { begin, end } = date;
-      this.store.dispatch(ExchangeActions.period({ begin, end }));
+      this.periodBegin = begin;
+      this.periodEnd = end;
+      this.store.dispatch(ExchangeActions.period({ begin, end, currency: this.defaultCurrency }));
     } else {
+      this.periodBegin = null;
+      this.periodEnd = null;
       this.store.dispatch(ExchangeActions.periodClear());
     }
   }

@@ -14,7 +14,7 @@ export const convertValue = createAction(`[${feature}] Convert Value`, props<{ a
 export const convertValueSuccess = createAction(`[${feature}] Convert Value Success`, props<{ convertResult }>());
 export const convertValueFail = createAction(`[${feature}] Convert Value Error`, props<{ error }>());
 
-export const period = createAction(`[${feature}] By Period`, props<{ begin, end }>());
+export const period = createAction(`[${feature}] By Period`, props<{ begin, end, currency }>());
 export const periodSuccess = createAction(`[${feature}] By Period Success`, props<{ periodCurrencies }>());
 export const periodFail = createAction(`[${feature}] By Period Error`, props<{ error }>());
 export const periodClear = createAction(`[${feature}] By Period Clear`);

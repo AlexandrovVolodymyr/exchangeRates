@@ -80,13 +80,14 @@ const currencyReducer = createReducer(
       loading: false
     }
   }),
-  on(ExchangeActions.period, (state, { begin, end }) => {
+  on(ExchangeActions.period, (state, { begin, end, currency }) => {
     return {
       ...state,
       period: {
         begin,
         end
       },
+      currency,
       loading: true
     }
   }),
